@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Aviones - Aeropuerto</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<body>
+  <h1>Gestión de Aviones - Aeropuerto</h1>
+
+  <h2>Aviones</h2>
+
+  <table>
+    <tr>
+      <th>Número de Registro</th>
+      <th>Aerolínea</th>
+      <th>Capacidad</th>
+      <th>Estado</th>
+      <th>Puerta de Embarque</th>
+      <th>Acciones</th> 
+    </tr>
+    <% planes.forEach(plane => { %>
+      <tr>
+        <td><%= plane.registrationNumber %></td>
+        <td><%= plane.airline %></td>
+        <td><%= plane.capacity %></td>
+        <td><%= plane.status %></td>
+        <td><%= plane.gateNumber || 'Sin asignar' %></td> 
+        <td>
+          <% if (plane.status === 'Disponible') { %>
+            <form method="POST" action="/gates/assign/<%= plane.registrationNumber %>">
+              <select name="gateNumber">
+                <% gates.filter(gate => gate.status === 'Disponible').forEach(gate => { %>
+                  <option value="<%= gate.number %>">Puerta <%= gate.number %></option>
+                <% }) %>
+              </select>
+              <button type="submit">Asignar</button>
+            </form>
+          <% } %>
+          <% if (plane.status === 'Ocupado') { %>
+            <form method="POST" action="/gates/unassign/<%= plane.registrationNumber %>" style="display: inline;">
+              <button type="submit">Desasignar</button>
+            </form>
+          <% } %>
+          <a href="/planes/edit/<%= plane.registrationNumber %>">Editar</a>
+          <form method="POST" action="/planes/delete/<%= plane.registrationNumber %>" style="display: inline;">
+            <button type="submit">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+  
+ 
+<h2>Puertas de Embarque</h2>
+
+<table>
+  <tr>
+    <th>Número</th>
+    <th>Estado</th>
+  </tr>
+  <% gates.forEach(gate => { %>
+    <tr>
+      <td>Puerta <%= gate.number %></td>
+      <td><%= gate.status %></td>
+    </tr>
+  <% }) %>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<h2>Editar Avión</h2>
+
+<form method="POST" action="/planes/edit/<%= plane.registrationNumber %>">
+  <label for="airline">Aerolínea:</label>
+  <input type="text" id="airline" name="airline" value="<%= plane.airline %>" required>
+
+  <label for="capacity">Capacidad:</label>
+  <input type="number" id="capacity" name="capacity" value="<%= plane.capacity %>" required>
+
+  <label for="status">Estado:</label>
+  <select id="status" name="status" required>
+    <option value="Disponible" <% if (plane.status === 'Disponible') { %>selected<% } %>>Disponible</option>
+    <option value="En mantenimiento" <% if (plane.status === 'En mantenimiento') { %>selected<% } %>>En mantenimiento</option>
+    <option value="En vuelo" <% if (plane.status === 'En vuelo') { %>selected<% } %>>En vuelo</option>
+  </select>
+
+  <button type="submit">Guardar</button>
+</form>
